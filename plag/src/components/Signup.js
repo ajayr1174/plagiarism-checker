@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import background from "./assets/images/signup.png";
-import {Link} from "react-router-dom"
+import {Link,useNavigate} from "react-router-dom"
 const axios = require("axios");
 
 function Signup(props) {
-  const { teacher } = props;
-  const [border, setBorder] = useState(false);
 
-  const [data, setData] = useState({
+
+  const navigate = useNavigate();
+
+  const init = {
     fname: "",
     lname: "",
     rollno: "",
@@ -15,9 +16,35 @@ function Signup(props) {
     password: "",
     confPassword: "",
     phoneno: "",
-  });
+  }
+
+
+
+  const { teacher } = props;
+  const [border, setBorder] = useState(false);
+  const [error, setError] = useState({
+    msg: "",
+    value: false
+  })
+  const [data, setData] = useState(init);
+
+  useEffect(() => {
+    setData(init);
+    return () => {
+      setBorder(false);
+     
+      setData(init);
+    };
+  }, [teacher]);
+
+
+
   const inputHandler = (e) => {
     setBorder(false);
+    setError({
+      value: false,
+      msg: ""
+    })
     setData({
       ...data,
       [e.target.name]: e.target.value,
@@ -47,8 +74,15 @@ function Signup(props) {
             })
             .then((e) => {
               console.log(e);
+              localStorage.setItem("token", e.data.token)
+              navigate("/login-teacher")
             })
-            .catch((err) => console.log(err))
+            .catch((err) => {
+              setError({
+                value:true,
+                msg: err.response.data
+              })
+            })
         : axios
         .post("http://localhost:4000/user/signup", {
           email,
@@ -59,8 +93,17 @@ function Signup(props) {
         })
         .then((e) => {
           console.log(e);
+          localStorage.setItem("token", e.data.token)
+          navigate("/")
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err.response);
+          setError({
+            value:true,
+            msg: err.response.data
+          })
+          console.log(error)
+        });
     }
   };
 
@@ -126,25 +169,35 @@ function Signup(props) {
                   <div className="col">
                     <input
                       type="number"
-                      className="form-control my-2"
+                      className={
+                      !error.value
+                        ?"form-control my-2"
+                        : `form-control my-2 border-danger border-2`
+                    }
                       placeholder="Roll No"
                       aria-label="Roll No"
                       value={data.rollno}
                       name="rollno"
                       onChange={inputHandler}
                     />
+                    {error.value && <p className="text-danger">{error.msg}</p>}
                   </div>
                 )}
                 <div className="col">
                   <input
                     type="email"
-                    className="form-control my-2"
+                    className={
+                      !error.value
+                        ?"form-control my-2"
+                        : `form-control my-2 border-danger border-2`
+                    }
                     placeholder="Email"
                     aria-label="email"
                     value={data.email}
                     name="email"
                     onChange={inputHandler}
                   />
+                    {error.value && <p className="text-danger">{error.msg}</p>}
                 </div>
               </div>
               {/* Password and confirm password */}
@@ -224,7 +277,17 @@ function Signup(props) {
             ></img>
           </div>
         </div>
+
+
+ 
+
+
       </div>
+
+
+ 
+    
+
     </>
   );
 }

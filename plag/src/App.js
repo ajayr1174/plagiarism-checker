@@ -3,17 +3,18 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import { Routes, Route } from "react-router-dom";
 import DashbordStudent from "./components/DashbordStudent";
+import DashboardTeacher from "./components/DashboardTeacher";
 
 function App() {
   return (
 
-    <DashbordStudent/>
+    <DashboardTeacher/>
     // <Routes>
     //   <Route exect path="/" element={<Login />}></Route>
     //   <Route exect path="/signup-student" element={<Signup  />}></Route>
     //   <Route exect path="/login-teacher" element={<Login teacher={true} />}></Route>
     //   <Route exect path="/signup-teacher" element={<Signup teacher={true} />}></Route>
-    // </Routes>
+    // </Routes> 
   )
 }
 

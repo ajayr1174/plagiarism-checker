@@ -19,7 +19,9 @@ function DashbordStudent() {
   return (
     <>
       <Navbar />
-      <div className="container mt-5 d-flex justify-content-center">
+     
+      <div className="container mt-5 d-flex  flex-column">
+      <h1 className="text-white">Upload Assingment  </h1>
         <form className="w-75" >
           <div className="input-group mb-3 ">
             <input type="file" className="form-control" id="inputGroupFile02" name="file"  onChange={fileHandler} />
