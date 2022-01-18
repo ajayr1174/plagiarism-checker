@@ -3,6 +3,9 @@ import Navbar from "./Navbar";
 
 function DashbordStudent() {
 
+  let user =JSON.parse( localStorage.getItem("user"));
+  console.log(user)
+
     const [file, setfile] = useState();
 
     const fileHandler =(e) =>{
@@ -18,7 +21,7 @@ function DashbordStudent() {
 
   return (
     <>
-      <Navbar />
+      <Navbar user={user}/>
      
       <div className="container mt-5 d-flex  flex-column">
       <h1 className="text-white">Upload Assingment  </h1>

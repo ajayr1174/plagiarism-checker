@@ -1,13 +1,17 @@
 import React from "react";
 import Navbar from "./Navbar";
 
-function DashboardTeacher() {
+function DashboardTeacher( u) {
+  
+  let user =JSON.parse( localStorage.getItem("user"));
+  // console.log(user)
+ 
   return (
     <>
-      <Navbar />
+      <Navbar user={user} />
 
       <div className="container w-75 mx-auto mt-5">
-        <table class="table table-striped">
+        <table className="table table-striped">
           <thead>
             <tr>
               <th scope="col">Roll No.</th>
@@ -31,7 +35,7 @@ function DashboardTeacher() {
             </tr>
             <tr>
               <th scope="row">3</th>
-              <td colspan="2">Larry the Bird</td>
+              <td colSpan="2">Larry the Bird</td>
               <td>@twitter</td>
             </tr>
           </tbody>

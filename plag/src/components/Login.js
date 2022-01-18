@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import background2 from "./assets/images/login.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import jwtDecode from "jwt-decode";
+
 function Login({ teacher }) {
+
+  const navigate = useNavigate();
+
   const init = {
     rollno: "",
     password: "",
@@ -50,7 +55,12 @@ function Login({ teacher }) {
               password,
             })
             .then((e) => {
-              console.log(e);
+              console.log(e.data.token);
+              let user = jwtDecode(e.data.token)
+              user.token = e.data.token;
+              user.teacher = true;
+              localStorage.setItem("user", JSON.stringify(user));
+              navigate("/teacher", {user:user})
             })
             .catch((err) => {
               setBorder(true);
@@ -62,7 +72,13 @@ function Login({ teacher }) {
               password,
             })
             .then((e) => {
-              console.log(e);
+              // console.log(e);
+              let user = jwtDecode(e.data.token)
+              user.token = e.data.token;
+              user.student = true;
+              localStorage.setItem("user", JSON.stringify(user));
+              navigate("/student")
+
             })
             .catch((err) => {
               setBorder(true);

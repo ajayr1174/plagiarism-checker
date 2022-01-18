@@ -1,7 +1,26 @@
 import React from 'react'
 import {FaUserCircle} from "react-icons/fa"
+import {Link, useNavigate} from "react-router-dom";
 
-function Navbar() {
+
+function Navbar({user}) {
+
+  // console.log(user)
+  const navigate = useNavigate()
+
+    const logout = () =>{
+      
+      if(JSON.parse(localStorage.getItem("user")).teacher){
+        localStorage.removeItem("user");
+        navigate("/login-teacher");
+      }else{
+        localStorage.removeItem("user");
+        navigate("/");
+      }
+     
+
+    }
+
     return (
         <>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -11,21 +30,25 @@ function Navbar() {
       <span className="navbar-toggler-icon"></span>
     </button>
     
-      <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
+      {user.teacher && <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
         <li className="nav-item">
-          <a className="nav-link " aria-current="page" href="#">Home</a>
+          <Link to="/create-assingment" className="nav-link " aria-current="page" >Create Assignment</Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link text-bold" href="#">Link</a>
+          <Link to="/view-all" className="nav-link text-bold" href="#">view All</Link>
         </li>
         
        
-      </ul>
+      </ul>}
+      <div>
+
      
       <FaUserCircle className='me-2 ' size="2em"/>
-      <span className='fs-4 align-middle me-5'>Ajay</span>
+      <span className='fs-4 align-middle me-5'>{user.teacher ?user.email: user.rollno}</span>
      
       
+      <button className='btn btn-danger' onClick={logout}> Logout   </button>
+      </div>   
       
    
   </div>
