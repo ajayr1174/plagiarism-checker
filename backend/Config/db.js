@@ -4,8 +4,8 @@ const ConnectApp=(app)=>{
     app.listen(4000,()=>{
         console.log('server is Running at 4000')
     })
-}).catch(()=>{
-    console.log("Connection lost")
+}).catch((err)=>{
+    console.log(err);
 })
 }
 module.exports=ConnectApp

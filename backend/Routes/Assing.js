@@ -2,7 +2,7 @@ const express=require('express');
 const JWT_VERIFY = require('../middleware/jwtmiddleware');
 const router=express.Router();
 const JWT_VERIFY_STUDENT=require('../middleware/studentjwt')
-const { CreateAssingment, viewAll, submitAssingment } = require('../Controller/CreateAssingment');
+const { CreateAssingment, viewAll, submitAssingment,seeParticular } = require('../Controller/CreateAssingment');
 const { Assement } = require('../Model/Assesments');
 const { Copies } = require('../Model/studentcopies');
 
@@ -33,6 +33,7 @@ const valid_params=async(req,res,next)=>{
 
 router.post("/t/create", JWT_VERIFY,checkValidate,CreateAssingment);
 router.get('/t/view',JWT_VERIFY,viewAll)
+router.get('/t/view/:id',JWT_VERIFY,seeParticular)
 router.post('/submit/:id',JWT_VERIFY_STUDENT, valid_params,submitAssingment)
 
 

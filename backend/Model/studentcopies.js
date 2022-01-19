@@ -4,8 +4,8 @@ const StudentCopies=new mongoose.Schema({
     submitted_id:{
         type:String,
         required:true,
-        unique:true,
-        index:true,
+        
+        // index:true,
     },
     filepath:{
         type:String,
@@ -14,7 +14,8 @@ const StudentCopies=new mongoose.Schema({
     subjectcode:
     {
         type:String,
-        required:true
+        required:true,
+        
     },
     student:{
         type:mongoose.Schema.Types.ObjectId,
@@ -30,6 +31,6 @@ const StudentCopies=new mongoose.Schema({
         default:`0`
     }
 })
-StudentCopies.plugin(validator);
-const Copies=mongoose.model('Copie',StudentCopies);
+// StudentCopies.plugin(validator);
+const Copies=mongoose.model('sheets',StudentCopies);
 module.exports={Copies}

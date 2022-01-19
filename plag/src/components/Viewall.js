@@ -1,6 +1,6 @@
 import React ,{useEffect, useState} from 'react'
 import Navbar from './Navbar'
-
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function Viewall() {
@@ -39,12 +39,13 @@ function Viewall() {
           </div>
 
           {data && data.map((e) =>(
-           
+            <Link to ={`${e.subjectcode}`}>
+              <div className="row py-2" key ={e._id} >
+              <div className="col-md-5">{e.subject}</div>
+              <div className="col-md-5" style={{color:'dodgerblue'}}>http://localhost:3000/submit/{e.subjectcode}</div>
+            </div>
+          </Link>
 
-            <div className="row py-2" key ={e._id} >
-            <div className="col-md-5">{e.subject}</div>
-            <div className="col-md-5">{e.subjectcode}</div>
-          </div>
          
           ))}
        </div>

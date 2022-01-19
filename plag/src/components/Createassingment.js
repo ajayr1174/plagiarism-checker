@@ -129,7 +129,7 @@ function Createassingment() {
         >
           <h4>Assingment Created Successfully</h4>
           <div className="assingment-details">
-            <p>Submission url : {assingmnet.submissionUrl}</p>
+            <p >Submission url : <span style={{color:'dodgerblue'}}>http://localhost:3000/submit/{assingmnet.submissionUrl}</span></p>
             <p>Subject code: {assingmnet.subject}</p>
             <p>Year : {assingmnet.year}</p>
           </div>

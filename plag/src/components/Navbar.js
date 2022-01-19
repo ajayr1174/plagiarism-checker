@@ -35,7 +35,7 @@ function Navbar({user}) {
           <Link to="/create-assingment" className="nav-link " aria-current="page" >Create Assignment</Link>
         </li>
         <li className="nav-item">
-          <Link to="/view-all" className="nav-link text-bold" href="#">view All</Link>
+          <Link to="/view" className="nav-link text-bold" href="#">view All</Link>
         </li>
         
        

@@ -3,6 +3,10 @@
 
 const fs=require('fs')
 const path=require('path')
+const {Copies}=require('../Model/studentcopies')
+const express=require('express')
+const mongoose=require('mongoose')
+
 class TwoD
 {
    constructor(row,col)
@@ -47,6 +51,7 @@ class EditDistance
             {
                 if(i===0)this.dp[i][j]=j;
                 if(j===0)this.dp[i][j]=i;
+
             }
         }
         for(let i=1;i<=this.str.length;i++)
@@ -73,14 +78,13 @@ class EditDistance
 
 class ReadFile
 {
-    constructor(filename,dirname)
+    constructor(filename)
     {
         this.filename=filename
-        this.dirname=dirname
     }
     returnstring()
     {
-        this.reqpath=path.join(__dirname,"../","Files",this.dirname,this.filename);
+        this.reqpath=path.join(__dirname,"../",this.filename);
         this.file=fs.readFileSync(this.reqpath);
         this.filedata=this.file.toString();
 
@@ -89,23 +93,72 @@ class ReadFile
     }
 
 }
-let fileone=new ReadFile('main1.txt',"Text")
-let filetwo=new ReadFile('main3.txt','Text')
-const file=fileone.returnstring()
-const file2=filetwo.returnstring();
-console.log(file2.length,file.length)
-filetwo=null;
-fileone=null
+// let fileone=new ReadFile('main1.txt',"Text")
+// let filetwo=new ReadFile('main3.txt','Text')
+// const file=fileone.returnstring()
+// const file2=filetwo.returnstring();
+// console.log(file2.length,file.length)
+// filetwo=null;
+// fileone=null
 
-let arr=new TwoD(file2.length,file.length).__init();
-let plag=new EditDistance(file2,file,arr).calc()
-console.log(plag)
+// let arr=new TwoD(file2.length,file.length).__init();
+// let plag=new EditDistance(file2,file,arr).calc()
+// console.log(plag)
 
- const percentageplag=100-Math.round(plag/(Math.max(file.length,file2.length))*100)
+//  const percentageplag=100-Math.round(plag/(Math.max(file.length,file2.length))*100)
 
-// let percentageplag=plag/file.length *100;
+// // let percentageplag=plag/file.length *100;
 
-console.log(`${percentageplag}% in files`)
+// console.log(`${percentageplag}% in files`)
 
 
-console.log(`${percentageplag}% for file 2`)
+// console.log(`${percentageplag}% for file 2`)
+
+process.on('message',async(message)=>{
+
+    mongoose.connect('mongodb://localhost:27017/Plagram',{useUnifiedTopology:true}).then(async ()=>{
+       
+        try{
+        const getAllAssinment=await Copies.find({subjectcode:message.subjectcode});
+        
+        const newData=getAllAssinment.filter((item)=>item._id!=message.data.save_ass._id);
+            console.log(message.data.save_ass)
+            let superFile=new ReadFile(message.data.save_ass.filepath).returnstring()
+            console.log(superFile.length)
+            const len1=Math.min(2000,superFile.length);
+            let highPlag=0;
+            console.log(newData)
+            for(let i=0;i<newData.length;i++)
+            {
+
+                let currentFilePlag=parseInt(newData[i].plag);
+                
+                let currentFile=new ReadFile(newData[i].filepath).returnstring();
+              
+                const len2=Math.min(2000,currentFile.length);
+                let arr=new TwoD(len1,len2).__init();
+              
+                let plag=new EditDistance(superFile.slice(0,2000),currentFile.slice(0,2000),arr).calc();
+                plag=100-Math.round((plag/(Math.max(len1,len2))*100))
+                
+                if(plag>currentFilePlag)
+                {
+                    const update=await Copies.findByIdAndUpdate(newData[i]._id,{plag:plag},{upsert:true});
+                }
+                highPlag=Math.max(highPlag,plag);
+            }
+            console.log(highPlag)
+            const newUpdate=await Copies.findByIdAndUpdate(message.data.save_ass._id,{plag:highPlag},{upsert:true});
+            console.log(newUpdate)
+
+        }
+        catch(err)
+        {
+            console.log(err)
+        }
+    })
+    .catch(()=>{
+        console.log("error")
+    })
+    
+})

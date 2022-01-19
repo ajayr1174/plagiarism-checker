@@ -6,3 +6,7 @@
 body{
   background-color: dodgerblue;
 }
+.backgroundDanger{
+  background-color: rgb(220 53 69);
+  color:#fff
+}

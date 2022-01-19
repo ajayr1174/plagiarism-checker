@@ -10,7 +10,8 @@
 
 # production
 /build
-
+/Files
+/Controller..
 # misc
 .DS_Store
 .env.local
